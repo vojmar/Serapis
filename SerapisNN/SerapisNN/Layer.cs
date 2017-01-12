@@ -19,7 +19,7 @@ namespace SerapisNN
             }
         }
 
-        public void GenerateInputs(int num)
+        public void GenerateNeuronInputs(int num)
         {
             foreach(Neuron n in neurons)
             {
