@@ -9,14 +9,14 @@ namespace SerapisNN
     /// <summary>
     /// Sigmoid Neuron
     /// </summary>
-    class Neuron
+    public class Neuron
     {
         int bias;
         Input[] inputs;
 
         Random r = new Random();
 
-        Neuron(int bias)
+        public Neuron(int bias)
         {
             this.bias = bias;
         }
