@@ -15,7 +15,8 @@ namespace SerapisNN
             neurons = new Neuron[neuronCount];
             for (int i = 0; i < neuronCount; i++)
             {
-                neurons[i] = new Neuron(0);
+                //GENERATING NEURONS WITH BIAS FROM -20 TO 20
+                neurons[i] = new Neuron(-20, 20);
             }
         }
 
