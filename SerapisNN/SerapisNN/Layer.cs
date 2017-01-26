@@ -10,7 +10,7 @@ namespace SerapisNN
     {
         private Neuron[] neurons;
 
-        Layer(int neuronCount)
+        public Layer(int neuronCount)
         {
             neurons = new Neuron[neuronCount];
             for (int i = 0; i < neuronCount; i++)

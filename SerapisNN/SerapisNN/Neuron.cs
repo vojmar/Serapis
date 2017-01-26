@@ -43,7 +43,7 @@ namespace SerapisNN
             w = w - bias;
 
             //SIGMA FUNCTION FOR THIS NEURON
-            float sig = 1 / (1 + (float)Math.Pow(Math.E, -w));
+            float sig = 1 / (1 + (float)Math.Exp(-w));
 
             return sig;
 
