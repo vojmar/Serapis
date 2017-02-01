@@ -11,14 +11,14 @@ namespace SerapisNN
     /// </summary>
     public class Neuron
     {
-        double bias;
+        float bias;
         Input[] inputs;
 
         Random r = new Random();
 
         public Neuron(int ranBiasRangeMin, int ranBiasRangeMax)
         {
-            this.bias = r.NextDouble()*(ranBiasRangeMax - ranBiasRangeMin) + ranBiasRangeMin;
+            this.bias = (float) r.NextDouble()*(ranBiasRangeMax - ranBiasRangeMin) + ranBiasRangeMin;
         }
 
         public Neuron(int bias)
