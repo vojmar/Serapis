@@ -11,14 +11,15 @@ namespace SerapisNN
     /// </summary>
     public class Neuron
     {
-        float bias;
+        int bias;
         Input[] inputs;
+        public int output { get; private set; }
 
         Random r = new Random();
 
         public Neuron(int ranBiasRangeMin, int ranBiasRangeMax)
         {
-            this.bias = (float) r.NextDouble()*(ranBiasRangeMax - ranBiasRangeMin) + ranBiasRangeMin;
+            this.bias = (int) r.Next(ranBiasRangeMax - ranBiasRangeMin);
         }
 
         public Neuron(int bias)
@@ -38,9 +39,9 @@ namespace SerapisNN
         }
 
 
-        public float Compute()
+        public int Compute()
         {
-            float w = 0;
+            int w = 0;
             foreach(Input i in inputs)
             {
                 w = w + i.value * i.weight;
@@ -48,10 +49,10 @@ namespace SerapisNN
             w = w - bias;
 
             //SIGMA FUNCTION FOR THIS NEURON
-            float sig = 1 / (1 + (float)Math.Exp(-w));
-
-            return sig;
-
+            //Todo: Implement mathematical function
+            throw new NotImplementedException();
+            //output = result;
+            //return result;
         }
     }
 
@@ -59,7 +60,7 @@ namespace SerapisNN
     {
 
         public int weight;
-        public float value = 0;
+        public int value = 0;
 
         public Input(int w)
         {
@@ -71,15 +72,13 @@ namespace SerapisNN
         /// </summary>
         /// <param name="v">Number from 0 to 1</param>
         /// <returns></returns>
-        public bool setValue(float v)
+        public void setValue(int v)
         {
-            if (v >= 0 && v <= 1)
-            {
-                value = v;
-                return true;
-            }
-            else return false;
+            value = v;
         }
-
+        public void setWeight(int w)
+        {
+            weight = w;
+        }
     }
 }

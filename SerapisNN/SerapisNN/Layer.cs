@@ -8,7 +8,7 @@ namespace SerapisNN
 {
     class Layer
     {
-        private Neuron[] neurons;
+        public Neuron[] neurons { get; private set; }
 
         public Layer(int neuronCount)
         {
@@ -27,7 +27,19 @@ namespace SerapisNN
                 n.GenerateInputs(num);
             }
         }
-
+        public int[] GetNeuronOutputs()
+        {
+            int[] outputs = new int[neurons.Length];
+            for (int i = 0; i < neurons.Length; i++)
+            {
+                outputs[i] = neurons[i].output;
+            }
+            return outputs;
+        }
+        public Neuron[] GetNeurons()
+        {
+            return neurons;
+        }
         int NeuronCount
         {
             get
