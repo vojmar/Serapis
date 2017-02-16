@@ -36,10 +36,7 @@ namespace SerapisNN
             }
             return outputs;
         }
-        public Neuron[] GetNeurons()
-        {
-            return neurons;
-        }
+
         int NeuronCount
         {
             get
