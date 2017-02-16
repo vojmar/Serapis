@@ -39,6 +39,11 @@ namespace SerapisNN
             }
         }
 
+        public Input[] Inputs
+        {
+            get { return inputs; }
+        }
+
 
         public float Compute(float[] x)
         {

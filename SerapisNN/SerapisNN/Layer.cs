@@ -10,13 +10,13 @@ namespace SerapisNN
     {
         public Neuron[] neurons { get; private set; }
 
-        public Layer(int neuronCount)
+        public Layer(int neuronCount, Funkce f)
         {
             neurons = new Neuron[neuronCount];
             for (int i = 0; i < neuronCount; i++)
             {
                 //GENERATING NEURONS WITH BIAS FROM -20 TO 20
-                neurons[i] = new Neuron(-20, 20);
+                neurons[i] = new Neuron(-20, 20, f);
             }
         }
 
@@ -26,15 +26,6 @@ namespace SerapisNN
             {
                 n.GenerateInputs(num);
             }
-        }
-        public int[] GetNeuronOutputs()
-        {
-            int[] outputs = new int[neurons.Length];
-            for (int i = 0; i < neurons.Length; i++)
-            {
-                outputs[i] = neurons[i].output;
-            }
-            return outputs;
         }
 
         int NeuronCount
