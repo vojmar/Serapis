@@ -11,18 +11,18 @@ namespace SerapisNN
     /// </summary>
     public class Neuron
     {
-        int bias;
+        float bias;
         Input[] inputs;
-        public int output { get; private set; }
+        public float output { get; private set; }
 
         Random r = new Random();
 
-        public Neuron(int ranBiasRangeMin, int ranBiasRangeMax)
+        public Neuron(float ranBiasRangeMin, float ranBiasRangeMax)
         {
-            this.bias = (int) r.Next(ranBiasRangeMax - ranBiasRangeMin);
+            this.bias =  (float)(r.NextDouble() * (ranBiasRangeMax - ranBiasRangeMin));
         }
 
-        public Neuron(int bias)
+        public Neuron(float bias)
         {
             this.bias = bias;
         }
@@ -31,7 +31,6 @@ namespace SerapisNN
         {
             inputs = new Input[n];
             
-
             for(int i = 0; i < n; i++)
             {
                 inputs[i] = new Input(r.Next(0,100));
@@ -39,12 +38,12 @@ namespace SerapisNN
         }
 
 
-        public int Compute()
+        public int Compute(float x)
         {
-            int w = 0;
+            float w = 0;
             foreach(Input i in inputs)
             {
-                w = w + i.value * i.weight;
+                w = w + x * i.weight;
             }
             w = w - bias;
 
@@ -59,24 +58,14 @@ namespace SerapisNN
     public class Input
     {
 
-        public int weight;
-        public int value = 0;
+        public float weight;
 
-        public Input(int w)
+        public Input(float w)
         {
             weight = w;
         }
 
-        /// <summary>
-        /// Inputs value for this input
-        /// </summary>
-        /// <param name="v">Number from 0 to 1</param>
-        /// <returns></returns>
-        public void setValue(int v)
-        {
-            value = v;
-        }
-        public void setWeight(int w)
+        public void setWeight(float w)
         {
             weight = w;
         }
