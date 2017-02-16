@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SerapisNN
 {
-    class Funkce
+    public class Funkce
     {
         public delegate float F(float x);
 

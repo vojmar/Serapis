@@ -14,17 +14,19 @@ namespace SerapisNN
         float bias;
         Input[] inputs;
         public float output { get; private set; }
-
+        Funkce f;
         Random r = new Random();
 
-        public Neuron(float ranBiasRangeMin, float ranBiasRangeMax)
+        public Neuron(float ranBiasRangeMin, float ranBiasRangeMax, Funkce f)
         {
             this.bias =  (float)(r.NextDouble() * (ranBiasRangeMax - ranBiasRangeMin));
+            this.f = f;
         }
 
-        public Neuron(float bias)
+        public Neuron(float bias, Funkce f)
         {
             this.bias = bias;
+            this.f = f;
         }
 
         public void GenerateInputs(int n)
@@ -38,18 +40,20 @@ namespace SerapisNN
         }
 
 
-        public int Compute(float x)
+        public float Compute(float[] x)
         {
             float w = 0;
+            int it = 0;
             foreach(Input i in inputs)
             {
-                w = w + x * i.weight;
+                w = w + x[it] * i.weight;
+                it++;
             }
             w = w - bias;
 
             //SIGMA FUNCTION FOR THIS NEURON
             //Todo: Implement mathematical function
-            throw new NotImplementedException();
+            return f.Activate(w);
             //output = result;
             //return result;
         }

@@ -38,7 +38,7 @@ namespace SerapisNN
             }
         }
 
-        public float feedforward(Data d)
+        public float[] feedforward(Data d)
         {
             //DATA CHECK
             if (d.data.Length != inputLayerNeuronCount) throw new Exception("Unexpected input data, neuron count does not correspond with input lenght");
@@ -49,10 +49,16 @@ namespace SerapisNN
                 float[] tmpdata = new float[l.neurons.Length];
                 for(int i = 0; i < l.neurons.Length; i++)
                 {
-                    tmpdata[i] = l.neurons[i].Compute();
+                    tmpdata[i] = l.neurons[i].Compute(prlayer);
                 }
+                prlayer = tmpdata;
             }
-            return 0; //nothing yet
+            return prlayer; //nothing yet
+        }
+
+        public float backpropagation(LearnData d)
+        {
+            throw new NotImplementedException("LULZ");
         }
  
 
