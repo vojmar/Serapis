@@ -8,7 +8,7 @@ namespace SerapisNN
 {
     public class Funkce
     {
-        public delegate float F(float x);
+        public delegate float F(float x, float[] args = null);
 
         private F activate;
         private F derivate;
@@ -21,6 +21,7 @@ namespace SerapisNN
 
         public float Activate(float x) => activate(x);
         public float Derivate(float x) => derivate(x);
+        public float Derivate(float x, float[] args) => derivate(x, args);
     }
 
 }

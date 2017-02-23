@@ -120,7 +120,10 @@ namespace SerapisNN
 
                 for (int n = layers[l].neurons.Length-1; n<=0; n--)
                 {
-
+                    if(l == layers.Length-1)
+                    {
+                        nabla_b[l][n] = cost.Derivate(activations[l+1][n], new float[]{d.odata[n]});
+                    }
                 }
             }
 
