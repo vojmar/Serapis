@@ -12,21 +12,42 @@ namespace SerapisNN
         Layer[] layers;
         int inputLayerNeuronsInputCount;
         int inputLayerNeuronCount;
+        Funkce cost;
         /// <summary>
         /// Creates neural network with specified number of layers and neurons.
         /// Eq. creating 3 layer network with 2 neurons in first, 5 neurons in second and 1 neuron in third layers, do Network({2, 5, 1});
         /// </summary>
         /// <param name="layerNeuronCount">Array specifying number of neurons in each corresponding layer</param>
         /// <param name="inputLayerNeuronInputCount">Specifies number of inputs for input layer neurons</param>
-        public Network(int[] layerNeuronCount, Funkce[] f)
+        public Network(int[] layerNeuronCount, Funkce[] f, Funkce cost)
         {
             this.inputLayerNeuronCount = layerNeuronCount[0];
-
+            this.cost = cost;
 
             layers = new Layer[layerNeuronCount.Length];
             for(int n = 0; n < layerNeuronCount.Length; n++)
             {
                 layers[n] = new Layer(layerNeuronCount[n], f[n]);
+                if (n != 0) //IF !INPUT LAYER
+                {
+                    layers[n].GenerateNeuronInputs(layerNeuronCount[n - 1]);
+                }
+                else //GENERATE 1 INPUT ON 1ST LAYER
+                {
+                    layers[n].GenerateNeuronInputs(1);
+                }
+            }
+        }
+
+        public Network(int[] layerNeuronCount, Funkce f, Funkce cost)
+        {
+            this.inputLayerNeuronCount = layerNeuronCount[0];
+            this.cost = cost;
+
+            layers = new Layer[layerNeuronCount.Length];
+            for (int n = 0; n < layerNeuronCount.Length; n++)
+            {
+                layers[n] = new Layer(layerNeuronCount[n], f);
                 if (n != 0) //IF !INPUT LAYER
                 {
                     layers[n].GenerateNeuronInputs(layerNeuronCount[n - 1]);
@@ -61,24 +82,46 @@ namespace SerapisNN
             //throw new NotImplementedException("LULZ");
             float[][] nabla_b = new float[layers.Length][];
             float[][][] nabla_w = new float[layers.Length][][];
+
             float[][] activations = new float[layers.Length+1][];
+            float[] activation = d.idata;
+
+            float[][] zv = new float[layers.Length][];
+
             int lc = 0;
-            foreach (Layer l in layers)
+
+            activations[0] = d.idata;
+
+            foreach (Layer l in layers) //forward pass
             {
-                nabla_b[lc] = new float[l.neurons.Length];
-                nabla_w[lc] = new float[l.neurons.Length][];
+                activations[lc+1] = new float[l.neurons.Length];
+                zv[lc] = new float[l.neurons.Length];
                 int nc = 0;
                 foreach (Neuron n in l.neurons)
                 {
-                    nabla_b[lc][nc] = 0;
-                    nabla_w[lc][nc] = new float[n.Inputs.Length];
-                    for(int ic = 0; ic < n.Inputs.Length; ic++)
+                    float zvtmp = 0;
+                    for(int inp = 0; inp < n.Inputs.Length; inp++)
                     {
-                        nabla_w[lc][nc][ic] = 0;
+                        zvtmp += n.Inputs[inp].weight * activation[inp];
                     }
-                        nc++;
+                    zvtmp += n.bias;
+                    activations[lc+1][nc] = n.f.Activate(zvtmp);
+                    zv[lc][nc] = zvtmp;
+                    nc++;
                 }
+                activation = activations[lc+1];
                 lc++;
+            }
+
+            for (int l = layers.Length-1; l<=0; l--) //backprop
+            {
+                nabla_b[l] = new float[layers[l].neurons.Length];
+                nabla_w[l] = new float[layers[l].neurons.Length][];
+
+                for (int n = layers[l].neurons.Length-1; n<=0; n--)
+                {
+
+                }
             }
 
 

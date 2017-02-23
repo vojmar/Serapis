@@ -11,10 +11,10 @@ namespace SerapisNN
     /// </summary>
     public class Neuron
     {
-        float bias;
+        public float bias;
         Input[] inputs;
         public float output { get; private set; }
-        Funkce f;
+        public Funkce f;
         Random r = new Random();
 
         public Neuron(float ranBiasRangeMin, float ranBiasRangeMax, Funkce f)
