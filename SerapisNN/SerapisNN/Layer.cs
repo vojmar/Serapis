@@ -10,21 +10,21 @@ namespace SerapisNN
     {
         public Neuron[] neurons { get; private set; }
 
-        public Layer(int neuronCount, Funkce f)
+        public Layer(int neuronCount, Funkce f,int inputsCount)
         {
             neurons = new Neuron[neuronCount];
             for (int i = 0; i < neuronCount; i++)
             {
                 //GENERATING NEURONS WITH BIAS FROM -20 TO 20
-                neurons[i] = new Neuron(-20, 20, f);
+                neurons[i] = new Neuron(-20, 20, f,inputsCount);
             }
         }
 
-        public void GenerateNeuronInputs(int num)
+        public void DefineNeuronInputs(float[] inputs)
         {
-            foreach(Neuron n in neurons)
+            foreach (var neuron in neurons)
             {
-                n.GenerateInputs(num);
+                neuron.DefineInputs(inputs);
             }
         }
 
@@ -34,6 +34,15 @@ namespace SerapisNN
             {
                 return neurons.Length;
             }
+        }
+        public float[] ComputeAll()
+        {
+            List<float> outputs = new List<float>();
+            foreach (var item in neurons)
+            {
+                outputs.Add(item.Compute());
+            }
+            return outputs.ToArray();
         }
     }
 }

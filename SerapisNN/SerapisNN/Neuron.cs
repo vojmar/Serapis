@@ -34,7 +34,7 @@ namespace SerapisNN
             this.f = f;
         }
 
-        public void GenerateInputs(int[] n)
+        public void DefineInputs(float[] n)
         {
             if (n.Length == inputs.Length)
             {
@@ -80,7 +80,7 @@ namespace SerapisNN
             }
         }
 
-        public float Compute(float[] x)
+        public float Compute()
         {
             float tmp1=0,tmp2=0;
             for (int i = 0; i < inputs.Length; i++)
