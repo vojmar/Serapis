@@ -57,7 +57,30 @@ namespace SerapisNN
                 }
             }
         }
+        public Network(int[] layerNeuronCount)
+        {
+            throw new NotImplementedException();
+            Funkce f = null;//TODO: Default function
+            this.inputLayerNeuronCount = layerNeuronCount[0];
+            this.cost = cost;
 
+            layers = new Layer[layerNeuronCount.Length];
+            for (int n = 0; n < layerNeuronCount.Length; n++)
+            {
+                if (n != 0) //IF !INPUT LAYER
+                {
+                    layers[n] = new Layer(layerNeuronCount[n], f, layers[n - 1].neurons.Length);
+                }
+                else //GENERATE 1 INPUT ON 1ST LAYER
+                {
+                    layers[n] = new Layer(layerNeuronCount[n], f, 1);
+                }
+            }
+        }
+        public void Compute(int[] inputs)
+        {
+
+        }
         /*** THIS IS WRONG ON SO MANY LEVELS!!!
 
         public float[] feedforward(Data d)
