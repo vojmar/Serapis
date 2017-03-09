@@ -8,7 +8,7 @@ namespace SerapisNN
 {
     class Network
     {
-
+        
         Layer[] layers;
         int inputLayerNeuronsInputCount;
         int inputLayerNeuronCount;
@@ -27,14 +27,14 @@ namespace SerapisNN
             layers = new Layer[layerNeuronCount.Length];
             for(int n = 0; n < layerNeuronCount.Length; n++)
             {
-                layers[n] = new Layer(layerNeuronCount[n], f[n]);
+                
                 if (n != 0) //IF !INPUT LAYER
                 {
-                    layers[n].GenerateNeuronInputs(layerNeuronCount[n - 1]);
+                    layers[n] = new Layer(layerNeuronCount[n], f[n], layers[n - 1].neurons.Length);
                 }
                 else //GENERATE 1 INPUT ON 1ST LAYER
                 {
-                    layers[n].GenerateNeuronInputs(1);
+                    layers[n] = new Layer(layerNeuronCount[n], f[n],1);
                 }
             }
         }
@@ -47,14 +47,13 @@ namespace SerapisNN
             layers = new Layer[layerNeuronCount.Length];
             for (int n = 0; n < layerNeuronCount.Length; n++)
             {
-                layers[n] = new Layer(layerNeuronCount[n], f);
                 if (n != 0) //IF !INPUT LAYER
                 {
-                    layers[n].GenerateNeuronInputs(layerNeuronCount[n - 1]);
+                    layers[n] = new Layer(layerNeuronCount[n], f, layers[n - 1].neurons.Length);
                 }
                 else //GENERATE 1 INPUT ON 1ST LAYER
                 {
-                    layers[n].GenerateNeuronInputs(1);
+                    layers[n] = new Layer(layerNeuronCount[n], f,1);
                 }
             }
         }
