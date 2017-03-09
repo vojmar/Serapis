@@ -15,7 +15,7 @@ namespace SerapisNN
         float[] inputs;
         float[] weights;
         private float acv;
-        float weightedDiameter;
+        float weightedArithmeticMean;
         public float output { get; private set; }
         Funkce f;
         Random r = new Random();
@@ -36,10 +36,33 @@ namespace SerapisNN
 
         public void GenerateInputs(int[] n)
         {
-            for (int i = 0; i < n.Length; i++)
+            if (n.Length == inputs.Length)
             {
-                inputs[i] = n[i];
+                for (int i = 0; i < n.Length; i++)
+                {
+                    inputs[i] = n[i];
+                }
             }
+            else { throw new ArithmeticException(); }
+            
+        }
+        public void ResetAllInputs()
+        {
+            for (int i = 0; i < inputs.Length; i++)
+            {
+                inputs[i] = 0;
+            }
+        }
+        public void DefineWeights(int[] weights)
+        {
+            if ((weights.Length == this.weights.Length) && (weights.Length == inputs.Length))
+            {
+                for (int i = 0; i < weights.Length; i++)
+                {
+                    this.weights[i] = weights[i];
+                }
+            }
+            else { throw new ArithmeticException(); }
         }
         public void GenerateRandomWeights()
         {
@@ -65,12 +88,9 @@ namespace SerapisNN
                 tmp1 = weights[i] * inputs[i]+ tmp1;
                 tmp2 = tmp2+weights[i];
             }
-            weightedDiameter = tmp1 / tmp2;
-            //SIGMA FUNCTION FOR THIS NEURON
-            //Todo: Implement mathematical function
-            return f.Activate(weightedDiameter);
-            //output = result;
-            //return result;
+            weightedArithmeticMean = tmp1 / tmp2;
+            weightedArithmeticMean = weightedArithmeticMean - bias;
+            return f.Activate(weightedArithmeticMean);
         }
     }
 }
