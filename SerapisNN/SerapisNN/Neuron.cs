@@ -15,6 +15,7 @@ namespace SerapisNN
         float[] inputs;
         float[] weights;
         private float acv;
+        float weightedDiameter;
         public float output { get; private set; }
         Funkce f;
         Random r = new Random();
@@ -58,18 +59,16 @@ namespace SerapisNN
 
         public float Compute(float[] x)
         {
-            float w = 0;
-            int it = 0;
-            foreach(Input i in inputs)
+            float tmp1=0,tmp2=0;
+            for (int i = 0; i < inputs.Length; i++)
             {
-                w = w + x[it] * i.weight;
-                it++;
+                tmp1 = weights[i] * inputs[i]+ tmp1;
+                tmp2 = tmp2+weights[i];
             }
-            w = w - bias;
-
+            weightedDiameter = tmp1 / tmp2;
             //SIGMA FUNCTION FOR THIS NEURON
             //Todo: Implement mathematical function
-            return f.Activate(w);
+            return f.Activate(weightedDiameter);
             //output = result;
             //return result;
         }
