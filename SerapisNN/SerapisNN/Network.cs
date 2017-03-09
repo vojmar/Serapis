@@ -59,6 +59,8 @@ namespace SerapisNN
             }
         }
 
+        /*** THIS IS WRONG ON SO MANY LEVELS!!!
+
         public float[] feedforward(Data d)
         {
             //DATA CHECK
@@ -74,7 +76,7 @@ namespace SerapisNN
                 }
                 prlayer = tmpdata;
             }
-            return prlayer; //nothing yet
+            return prlayer;
         }
 
         public float backpropagation(LearnData d)
@@ -113,16 +115,38 @@ namespace SerapisNN
                 lc++;
             }
 
+
+            float[] delta;
             for (int l = layers.Length-1; l<=0; l--) //backprop
             {
                 nabla_b[l] = new float[layers[l].neurons.Length];
                 nabla_w[l] = new float[layers[l].neurons.Length][];
+                delta = new float[layers[l].neurons.Length];
 
-                for (int n = layers[l].neurons.Length-1; n<=0; n--)
+                for (int n = 0; n < layers[l].neurons.Length; n++)
                 {
-                    if(l == layers.Length-1)
+                    
+                    if (l == layers.Length-1)
                     {
-                        nabla_b[l][n] = cost.Derivate(activations[l+1][n], new float[]{d.odata[n]});
+                        float deriv = layers[l - 1].neurons[n].f.Derivate(zv[l][n]); //NEVÍM
+                        delta[n] = cost.Derivate(activations[l + 1][n], new float[] { d.odata[n] * deriv });
+                        nabla_b[l][n] = delta[n];
+                        nabla_w[l][n] = new float[layers[l].neurons[n].Inputs.Length];
+                        for (int inp = 0; inp < layers[l].neurons[n].Inputs.Length; inp++)
+                        {
+                            nabla_w[l][n][inp] = delta[n] * activations[l - 1][n]; //ASI ŠPATNĚ
+                        }
+                    }
+                    else
+                    {
+                        float[] odelta = delta;
+                        float z = zv[l][n];
+                        float deriv = layers[l].neurons[n].f.Derivate(z);
+                        float dlt = 0;
+                        for(int inp = 0; inp < layers[l+1].neurons[n].Inputs.Length; inp++)
+                        {
+                            dlt += layers[l + 1].neurons[n].Inputs[inp].weight * delta[n]; //IDK
+                        }
                     }
                 }
             }
@@ -131,7 +155,7 @@ namespace SerapisNN
             return 0f; //nothing yet
         }
  
-
+    ***/
         public struct Data
         {
             public float[] data;
