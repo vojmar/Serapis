@@ -12,15 +12,19 @@ namespace SerapisNN
     public class Neuron
     {
         public float bias;
-        Input[] inputs;
+        float[] inputs;
+        float[] weights;
+        private float acv;
         public float output { get; private set; }
-        public Funkce f;
+        Funkce f;
         Random r = new Random();
 
-        public Neuron(float ranBiasRangeMin, float ranBiasRangeMax, Funkce f)
+        public Neuron(float ranBiasRangeMin, float ranBiasRangeMax, Funkce f,int inputsCount)
         {
             this.bias =  (float)(r.NextDouble() * (ranBiasRangeMax - ranBiasRangeMin));
             this.f = f;
+            inputs = new float[inputsCount];
+            weights = new float[inputsCount];
         }
 
         public Neuron(float bias, Funkce f)
@@ -29,21 +33,28 @@ namespace SerapisNN
             this.f = f;
         }
 
-        public void GenerateInputs(int n)
+        public void GenerateInputs(int[] n)
         {
-            inputs = new Input[n];
-            
-            for(int i = 0; i < n; i++)
+            for (int i = 0; i < n.Length; i++)
             {
-                inputs[i] = new Input(r.Next(0,100));
+                inputs[i] = n[i];
             }
         }
-
-        public Input[] Inputs
+        public void GenerateRandomWeights()
         {
-            get { return inputs; }
+            Random r = new Random();
+            if (weights != null)
+            {
+                for (int i = 0; i < weights.Length; i++)
+                {
+                    weights[i] = r.Next(1,100);
+                }
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
         }
-
 
         public float Compute(float[] x)
         {
@@ -61,22 +72,6 @@ namespace SerapisNN
             return f.Activate(w);
             //output = result;
             //return result;
-        }
-    }
-
-    public class Input
-    {
-
-        public float weight;
-
-        public Input(float w)
-        {
-            weight = w;
-        }
-
-        public void setWeight(float w)
-        {
-            weight = w;
         }
     }
 }
