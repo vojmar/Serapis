@@ -22,7 +22,7 @@ namespace SerapisNN
 
         public void DefineNeuronInputs(float[] inputs)
         {
-            foreach (var neuron in neurons)
+            foreach (Neuron neuron in neurons)
             {
                 neuron.DefineInputs(inputs);
             }

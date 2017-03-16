@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DMath;
 
 namespace SerapisNN
 {
@@ -13,37 +14,13 @@ namespace SerapisNN
         int inputLayerNeuronsInputCount;
         int inputLayerNeuronCount;
         Funkce cost;
-        /// <summary>
-        /// Creates neural network with specified number of layers and neurons.
-        /// Eq. creating 3 layer network with 2 neurons in first, 5 neurons in second and 1 neuron in third layers, do Network({2, 5, 1});
-        /// </summary>
-        /// <param name="layerNeuronCount">Array specifying number of neurons in each corresponding layer</param>
-        /// <param name="inputLayerNeuronInputCount">Specifies number of inputs for input layer neurons</param>
-        public Network(int[] layerNeuronCount, Funkce[] f, Funkce cost)
-        {
-            this.inputLayerNeuronCount = layerNeuronCount[0];
-            this.cost = cost;
-
-            layers = new Layer[layerNeuronCount.Length];
-            for(int n = 0; n < layerNeuronCount.Length; n++)
-            {
-                
-                if (n != 0) //IF !INPUT LAYER
-                {
-                    layers[n] = new Layer(layerNeuronCount[n], f[n], layers[n - 1].neurons.Length);
-                }
-                else //GENERATE 1 INPUT ON 1ST LAYER
-                {
-                    layers[n] = new Layer(layerNeuronCount[n], f[n],1);
-                }
-            }
-        }
+        Funkce fce;
 
         public Network(int[] layerNeuronCount, Funkce f, Funkce cost)
         {
             this.inputLayerNeuronCount = layerNeuronCount[0];
             this.cost = cost;
-
+            this.fce = f;
             layers = new Layer[layerNeuronCount.Length];
             for (int n = 0; n < layerNeuronCount.Length; n++)
             {
@@ -59,7 +36,6 @@ namespace SerapisNN
         }
         public Network(int[] layerNeuronCount)
         {
-            throw new NotImplementedException();
             Funkce f = null;//TODO: Default function
             this.inputLayerNeuronCount = layerNeuronCount[0];
             this.cost = cost;
@@ -77,137 +53,50 @@ namespace SerapisNN
                 }
             }
         }
-        public float[] Compute(int[] inputs)
+        public float[] Compute(float[] inputs)
         {
             if (layers.Length > 1 && layers != null)
             {
-                float[] outputs = null;
+                float[] outputs = inputs;
                 for (int i = 0; i < layers.Length; i++)
                 {
+                    layers[i].DefineNeuronInputs(outputs);
                     outputs = layers[i].ComputeAll();
-                    if (i + 1 < layers.Length)
-                        layers[i + 1].DefineNeuronInputs(outputs);
                 }
                 return outputs;
             }
             else
             {
-                throw new NullReferenceException();
+                throw new Exception("Něco je špatně! Inputy nesouhlasí!");
             }
         }
-
-        public void defineInputs(float[] Inputs)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data">sum data</param>
+        /// <param name="iterations">If 0 learns from all the data</param>
+        public void Learn(LearnData[] data, int iterations = 0)
         {
-            if (layers.Length > 1 && layers != null)
-            {
-                layers[0].DefineNeuronInputs(Inputs);
-            }
-            else
-            {
-                throw new NullReferenceException();
-            }
+
         }
 
-        /*** THIS IS WRONG ON SO MANY LEVELS!!!
-
-        public float[] feedforward(Data d)
+        public void BackProp(float[] idata, float[] odata)
         {
-            //DATA CHECK
-            if (d.data.Length != inputLayerNeuronCount) throw new Exception("Unexpected input data, neuron count does not correspond with input lenght");
-            //DATA CHECK END
-            float[] prlayer = d.data;
-            foreach(Layer l in layers)
+            if (odata.Length != layers[layers.Length - 1].neurons.Length) throw new ArgumentException("Output data lenght does not correspond with output layer");
+            float[] chdata = Compute(idata);
+
+            float delta;
+            //OUTPUT LAYER(ERROR)
+            for(int i = 0; i < odata.Length; i++)
             {
-                float[] tmpdata = new float[l.neurons.Length];
-                for(int i = 0; i < l.neurons.Length; i++)
-                {
-                    tmpdata[i] = l.neurons[i].Compute(prlayer);
-                }
-                prlayer = tmpdata;
+                //ŠPATNĚ - delta = cost.Derivate(layers[layers.Length - 1].neurons[i].output) * fce.Derivate(layers[layers.Length - 1].neurons[i].output);
             }
-            return prlayer;
-        }
-
-        public float backpropagation(LearnData d)
-        {
-            //throw new NotImplementedException("LULZ");
-            float[][] nabla_b = new float[layers.Length][];
-            float[][][] nabla_w = new float[layers.Length][][];
-
-            float[][] activations = new float[layers.Length+1][];
-            float[] activation = d.idata;
-
-            float[][] zv = new float[layers.Length][];
-
-            int lc = 0;
-
-            activations[0] = d.idata;
-
-            foreach (Layer l in layers) //forward pass
+            //OTHER LAYERS
+            for(int i = layers.Length - 2; i >= 0; i--)
             {
-                activations[lc+1] = new float[l.neurons.Length];
-                zv[lc] = new float[l.neurons.Length];
-                int nc = 0;
-                foreach (Neuron n in l.neurons)
-                {
-                    float zvtmp = 0;
-                    for(int inp = 0; inp < n.Inputs.Length; inp++)
-                    {
-                        zvtmp += n.Inputs[inp].weight * activation[inp];
-                    }
-                    zvtmp += n.bias;
-                    activations[lc+1][nc] = n.f.Activate(zvtmp);
-                    zv[lc][nc] = zvtmp;
-                    nc++;
-                }
-                activation = activations[lc+1];
-                lc++;
+
             }
 
-
-            float[] delta;
-            for (int l = layers.Length-1; l<=0; l--) //backprop
-            {
-                nabla_b[l] = new float[layers[l].neurons.Length];
-                nabla_w[l] = new float[layers[l].neurons.Length][];
-                delta = new float[layers[l].neurons.Length];
-
-                for (int n = 0; n < layers[l].neurons.Length; n++)
-                {
-                    
-                    if (l == layers.Length-1)
-                    {
-                        float deriv = layers[l - 1].neurons[n].f.Derivate(zv[l][n]); //NEVÍM
-                        delta[n] = cost.Derivate(activations[l + 1][n], new float[] { d.odata[n] * deriv });
-                        nabla_b[l][n] = delta[n];
-                        nabla_w[l][n] = new float[layers[l].neurons[n].Inputs.Length];
-                        for (int inp = 0; inp < layers[l].neurons[n].Inputs.Length; inp++)
-                        {
-                            nabla_w[l][n][inp] = delta[n] * activations[l - 1][n]; //ASI ŠPATNĚ
-                        }
-                    }
-                    else
-                    {
-                        float[] odelta = delta;
-                        float z = zv[l][n];
-                        float deriv = layers[l].neurons[n].f.Derivate(z);
-                        float dlt = 0;
-                        for(int inp = 0; inp < layers[l+1].neurons[n].Inputs.Length; inp++)
-                        {
-                            dlt += layers[l + 1].neurons[n].Inputs[inp].weight * delta[n]; //IDK
-                        }
-                    }
-                }
-            }
-
-
-            return 0f; //nothing yet
-        }
- 
-    ***/
-        public struct Data
-        {
-            public float[] data;
         }
 
         public  struct LearnData
