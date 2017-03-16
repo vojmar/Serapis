@@ -77,10 +77,37 @@ namespace SerapisNN
                 }
             }
         }
-        public void Compute(int[] inputs)
+        public float[] Compute(int[] inputs)
         {
-
+            if (layers.Length > 1 && layers != null)
+            {
+                float[] outputs = null;
+                for (int i = 0; i < layers.Length; i++)
+                {
+                    outputs = layers[i].ComputeAll();
+                    if (i + 1 < layers.Length)
+                        layers[i + 1].DefineNeuronInputs(outputs);
+                }
+                return outputs;
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
         }
+
+        public void defineInputs(float[] Inputs)
+        {
+            if (layers.Length > 1 && layers != null)
+            {
+                layers[0].DefineNeuronInputs(Inputs);
+            }
+            else
+            {
+                throw new NullReferenceException();
+            }
+        }
+
         /*** THIS IS WRONG ON SO MANY LEVELS!!!
 
         public float[] feedforward(Data d)
