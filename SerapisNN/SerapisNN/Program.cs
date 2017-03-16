@@ -8,26 +8,60 @@ namespace SerapisNN
 {
     class Program
     {
+        //static void Main(string[] args)
+        //{
+        //    string arg = "";
+        //    if (args.Length < 1)
+        //    {
+        //        Console.WriteLine("No input");
+        //        Environment.Exit(1);
+        //    }
+        //    else if (args.Length > 1)
+        //    {
+        //        arg = string.Join(" ", args);
+        //    }
+        //    else { arg = args[0]; }
+        //    ConsoleManager cm = new ConsoleManager(arg);
+        //    cm.Init();
+        //}
+        
         static void Main(string[] args)
         {
-            string arg = "";
-            if (args.Length < 1)
-            {
-                Console.WriteLine("No input");
-                Environment.Exit(1);
-            }
-            else if (args.Length > 1)
-            {
-                arg = string.Join(" ", args);
-            }
-            else { arg = args[0]; }
-            ConsoleManager cm = new ConsoleManager(arg);
-            cm.Init();
+            NetworkManager mgr = new NetworkManager();
+            mgr.Init(args);
         }
+        
 
         private static void Cancel(object sender, ConsoleCancelEventArgs e)
         {
             
+        }
+        public partial class NetworkManager
+        {
+            Network network;
+            internal void Init(string[] args)
+            {
+                if (args.Length > 0)
+                {
+                    network = loadNetwork(string.Join(" ", args));
+                }
+                else
+                {
+                    Console.WriteLine("No network defined, Please specify neuron counts in layers (separated by commas):");
+                    string[] counts = Console.ReadLine().Split(',');
+                    List<int> countsInt = new List<int>();
+                    for (int i = 0; i < counts.Length; i++)
+                    {
+                        countsInt.Add(Convert.ToInt32(counts[i]));
+                    }
+                    network = new Network(countsInt.ToArray());
+                }
+            }
+
+            private Network loadNetwork(string v)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
     partial class ConsoleManager
