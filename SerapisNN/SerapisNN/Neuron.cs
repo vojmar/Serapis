@@ -14,8 +14,6 @@ namespace SerapisNN
         public float bias;
         float[] inputs;
         float[] weights;
-        private float acv;
-        float weightedArithmeticMean;
         public float output { get; private set; }
         Funkce f;
         Random r = new Random();
@@ -53,6 +51,7 @@ namespace SerapisNN
                 inputs[i] = 0;
             }
         }
+
         public void DefineWeights(int[] weights)
         {
             if ((weights.Length == this.weights.Length) && (weights.Length == inputs.Length))
@@ -64,6 +63,12 @@ namespace SerapisNN
             }
             else { throw new ArithmeticException(); }
         }
+
+        public int WeigthCount
+        {
+            get { return this.weights.Length; }
+        }
+
         public void GenerateRandomWeights()
         {
             Random r = new Random();
@@ -82,15 +87,13 @@ namespace SerapisNN
 
         public float Compute()
         {
-            float tmp1=0,tmp2=0;
+            float tmp1 = 0;
             for (int i = 0; i < inputs.Length; i++)
             {
-                tmp1 = weights[i] * inputs[i]+ tmp1;
-                tmp2 = tmp2+weights[i];
+                tmp1 += weights[i] * inputs[i];
             }
-            weightedArithmeticMean = tmp1 / tmp2;
-            weightedArithmeticMean = weightedArithmeticMean - bias;
-            return f.Activate(weightedArithmeticMean);
+            this.output = f.Activate(tmp1);
+            return this.output;
         }
     }
 }
