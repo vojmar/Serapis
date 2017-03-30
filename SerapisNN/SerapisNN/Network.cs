@@ -25,10 +25,12 @@ namespace SerapisNN
                 if (n != 0) //IF !INPUT LAYER
                 {
                     layers[n] = new Layer(layerNeuronCount[n], f, layers[n - 1].neurons.Length);
+                    layers[n].SetRandomWeights();
                 }
                 else //GENERATE 1 INPUT ON 1ST LAYER
                 {
                     layers[n] = new Layer(layerNeuronCount[n], f,1);
+                    layers[n].SetRandomWeights();
                 }
             }
         }
