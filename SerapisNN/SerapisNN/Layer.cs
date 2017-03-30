@@ -27,7 +27,13 @@ namespace SerapisNN
                 neuron.DefineInputs(inputs);
             }
         }
-
+        public void SetRandomWeights()
+        {
+            foreach (Neuron neuron in neurons)
+            {
+                neuron.GenerateRandomWeights();
+            }
+        }
         int NeuronCount
         {
             get
