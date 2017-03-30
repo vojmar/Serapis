@@ -13,13 +13,11 @@ namespace SerapisNN
         Layer[] layers;
         int inputLayerNeuronsInputCount;
         int inputLayerNeuronCount;
-        Funkce cost;
         Funkce fce;
 
-        public Network(int[] layerNeuronCount, Funkce f, Funkce cost)
+        public Network(int[] layerNeuronCount, Funkce f)
         {
             this.inputLayerNeuronCount = layerNeuronCount[0];
-            this.cost = cost;
             this.fce = f;
             layers = new Layer[layerNeuronCount.Length];
             for (int n = 0; n < layerNeuronCount.Length; n++)
@@ -38,7 +36,6 @@ namespace SerapisNN
         {
             Funkce f = null;//TODO: Default function
             this.inputLayerNeuronCount = layerNeuronCount[0];
-            this.cost = cost;
 
             layers = new Layer[layerNeuronCount.Length];
             for (int n = 0; n < layerNeuronCount.Length; n++)
@@ -85,16 +82,25 @@ namespace SerapisNN
             if (odata.Length != layers[layers.Length - 1].neurons.Length) throw new ArgumentException("Output data lenght does not correspond with output layer");
             float[] chdata = Compute(idata);
 
-            float delta;
-            //OUTPUT LAYER(ERROR)
+            float[][] grads;
+            //OUTPUT LAYER GRAD
+            grads = new float[this.layers.Length][];
+            float[] ograds = new float[odata.Length];
             for(int i = 0; i < odata.Length; i++)
             {
-                //ŠPATNĚ - delta = cost.Derivate(layers[layers.Length - 1].neurons[i].output) * fce.Derivate(layers[layers.Length - 1].neurons[i].output);
+                float deriv = (1 - chdata[i]) * chdata[i];
+                ograds[i] = deriv * (odata[i] - chdata[i]);
             }
             //OTHER LAYERS
-            for(int i = layers.Length - 2; i >= 0; i--)
+            for (int i = layers.Length - 1; i >= 0; i--)
             {
-
+                grads[i] = new float[this.layers[i].neurons.Length];
+                
+                for (int j = 0; j < this.layers[i].neurons.Length ; j++)
+                {
+                    float deriv = (1 - layers[i].neurons[j].output) * layers[i].neurons[j].output;
+                }
+                    
             }
 
         }
