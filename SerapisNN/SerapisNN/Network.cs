@@ -92,7 +92,7 @@ namespace SerapisNN
                 float deriv = (1 - chdata[i]) * chdata[i];
                 grads[layers.Length][i] = deriv * (odata[i] - chdata[i]);
             }
-            //OTHER LAYERS - špatně?
+            //OTHER LAYERS - špatně :(
             for (int i = layers.Length - 1; i >= 0; i--)
             {
                 grads[i] = new float[this.layers[i].neurons.Length];
@@ -108,14 +108,20 @@ namespace SerapisNN
                     grads[i][j] = deriv * sm;
                 }
             }
-                
+
             //UPDATE WEIGHTS
-
-            for (int j = layers.Length-1; j >= 0; j--)
+            float[][][] deltas;
+            deltas = new float[layers.Length][][];
+            for (int i = layers.Length-1; i >= 0; i--)
             {
-                for(int k = 0; k < layers[j].neurons.Length; k++)
+                deltas[i] = new float[layers[i].neurons.Length][];
+                for (int j = 0; i < layers[i].neurons.Length; i++)
                 {
+                    deltas[i][j] = new float[layers[i].neurons[j].WeigthCount];
+                    for(int k = 0; k < layers[i].neurons[k].WeigthCount; k++)
+                    {
 
+                    }
                 }
             }
 
