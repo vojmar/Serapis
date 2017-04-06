@@ -79,30 +79,47 @@ namespace SerapisNN
 
         }
 
-        public void BackProp(float[] idata, float[] odata)
+        public void BackProp(float[] idata, float[] odata, float learn)
         {
             if (odata.Length != layers[layers.Length - 1].neurons.Length) throw new ArgumentException("Output data lenght does not correspond with output layer");
             float[] chdata = Compute(idata);
 
             float[][] grads;
             //OUTPUT LAYER GRAD
-            grads = new float[this.layers.Length][];
-            float[] ograds = new float[odata.Length];
+            grads = new float[this.layers.Length+1][];
             for(int i = 0; i < odata.Length; i++)
             {
                 float deriv = (1 - chdata[i]) * chdata[i];
-                ograds[i] = deriv * (odata[i] - chdata[i]);
+                grads[layers.Length][i] = deriv * (odata[i] - chdata[i]);
             }
-            //OTHER LAYERS
+            //OTHER LAYERS - špatně?
             for (int i = layers.Length - 1; i >= 0; i--)
             {
                 grads[i] = new float[this.layers[i].neurons.Length];
-                
-                for (int j = 0; j < this.layers[i].neurons.Length ; j++)
+
+                for (int j = 0; j < this.layers[i].neurons.Length; j++)
                 {
                     float deriv = (1 - layers[i].neurons[j].output) * layers[i].neurons[j].output;
+                    float sm = 0f;
+                    for (int k = 0; k < layers[i].neurons[j].Weight.Length; k++)
+                    {
+                        sm += grads[i + 1][k] * layers[i].neurons[j].Weight[k];
+                    }
+                    grads[i][j] = deriv * sm;
                 }
-                    
+            }
+                
+            //UPDATE WEIGHTS
+
+            for (int j = layers.Length-1; j >= 0; j--)
+            {
+                for(int k = 0; k < layers[j].neurons.Length; k++)
+                {
+
+                }
+            }
+
+                 
             }
 
         }

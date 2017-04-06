@@ -18,9 +18,9 @@ namespace SerapisNN
         Funkce f;
         Random r = new Random();
 
-        public Neuron(float ranBiasRangeMin, float ranBiasRangeMax, Funkce f,int inputsCount)
+        public Neuron(float ranBiasRangeMin, float ranBiasRangeMax, Funkce f, int inputsCount)
         {
-            this.bias =  (float)(r.NextDouble() * (ranBiasRangeMax - ranBiasRangeMin));
+            this.bias = (float)(r.NextDouble() * (ranBiasRangeMax - ranBiasRangeMin));
             this.f = f;
             inputs = new float[inputsCount];
             weights = new float[inputsCount];
@@ -42,7 +42,7 @@ namespace SerapisNN
                 }
             }
             else { throw new ArithmeticException(); }
-            
+
         }
         public void ResetAllInputs()
         {
@@ -68,6 +68,12 @@ namespace SerapisNN
         {
             get { return this.weights.Length; }
         }
+
+        public float[] Weight
+            {
+            get { return this.weights; }
+            }
+
 
         public void GenerateRandomWeights()
         {
